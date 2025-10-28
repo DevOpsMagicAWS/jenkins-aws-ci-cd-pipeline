@@ -57,6 +57,7 @@ A complete DevOps CI/CD pipeline using Jenkins, Terraform, Docker, and LocalStac
 - ✅ Pre-configured Jenkins with essential plugins
 - ✅ Visual pipeline stage view
 - ✅ Docker CLI integrated in Jenkins container
+- ✅ Terraform CLI integrated in Jenkins container
 - ✅ One-command setup
 
 ## Pipeline Parameters
