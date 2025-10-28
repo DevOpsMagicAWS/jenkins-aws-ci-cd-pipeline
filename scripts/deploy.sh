@@ -47,8 +47,12 @@ else
     fi
     
     echo "[DEBUG] Starting our own LocalStack container..."
-    # Start LocalStack using docker-compose from provision directory
-    cd ../provision
+    # Get script directory and navigate to provision
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    PROVISION_DIR="$(dirname "$SCRIPT_DIR")/provision"
+    
+    echo "[DEBUG] Provision directory: $PROVISION_DIR"
+    cd "$PROVISION_DIR"
     docker-compose up -d localstack
     
     # Wait for LocalStack to be ready
@@ -69,7 +73,8 @@ else
         fi
     done
     
-    cd ../scripts
+    # Return to original directory
+    cd "$SCRIPT_DIR"
 fi
 
 cd infra-tf
