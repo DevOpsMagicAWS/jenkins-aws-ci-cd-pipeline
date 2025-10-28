@@ -22,8 +22,11 @@ pipeline {
 
         stage('Start LocalStack') {
             steps {
-                sh 'docker run -d --name localstack -p 4566:4566 -e SERVICES=s3,iam localstack/localstack:latest || true'
-                sh 'sleep 10'
+                sh 'docker stop localstack || true'
+                sh 'docker rm localstack || true'
+                sh 'docker run -d --name localstack --network bridge -p 4566:4566 -e SERVICES=s3,iam -e DEBUG=1 localstack/localstack:latest'
+                sh 'sleep 20'
+                sh 'curl -f http://localhost:4566/_localstack/health || exit 1'
             }
         }
 
