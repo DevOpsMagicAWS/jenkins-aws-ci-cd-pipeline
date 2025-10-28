@@ -18,11 +18,11 @@ A complete DevOps CI/CD pipeline using Jenkins, Terraform, Docker, and LocalStac
    docker compose up -d
    ```
 
-2. **Access Jenkins**: http://localhost:8080 (from host machine)
+2. **Access Jenkins**: http://localhost:8080 (admin/admin123)
 3. **Access LocalStack**: http://localhost:4566 (from host machine)
 4. **Create Jenkins Pipeline**: New Item → Pipeline → Use SCM → Point to this repository
 
-**Note**: Jenkins and LocalStack communicate internally via `localstack:4566` on the Docker network.
+**Note**: Jenkins comes pre-configured with required plugins and credentials. Jenkins and LocalStack communicate internally via `localstack:4566` on the Docker network.
 
 ## Pipeline Stages
 
@@ -54,6 +54,9 @@ A complete DevOps CI/CD pipeline using Jenkins, Terraform, Docker, and LocalStac
 - ✅ Docker network communication
 - ✅ Pipeline parameters
 - ✅ Health checks and restart policies
+- ✅ Pre-configured Jenkins with essential plugins
+- ✅ Visual pipeline stage view
+- ✅ One-command setup
 
 ## Pipeline Parameters
 
