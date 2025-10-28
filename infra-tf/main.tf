@@ -23,7 +23,3 @@ resource "aws_s3_bucket" "demo_bucket" {
 resource "random_id" "id" {
     byte_length = 4
 }
-
-output "bucket_name" {
-    value = aws_s3_bucket.demo_bucket.bucket  
-}
