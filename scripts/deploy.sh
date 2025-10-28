@@ -77,7 +77,14 @@ else
     cd "$SCRIPT_DIR"
 fi
 
-cd infra-tf
+# Navigate to Terraform directory (reuse SCRIPT_DIR if already set)
+if [ -z "$SCRIPT_DIR" ]; then
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+fi
+TERRAFORM_DIR="$(dirname "$SCRIPT_DIR")/infra-tf"
+echo "[DEBUG] Terraform directory: $TERRAFORM_DIR"
+cd "$TERRAFORM_DIR"
+
 terraform init || { echo "Terraform init failed"; exit 1; }
 terraform apply -auto-approve || { echo "Terraform apply failed"; exit 1; }
 echo "[INFO] LocalStack deployment completed."
