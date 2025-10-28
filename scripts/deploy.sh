@@ -4,6 +4,10 @@ export AWS_ENDPOINT_URL=http://localstack:4566
 export AWS_ACCESS_KEY_ID=test
 export AWS_SECRET_ACCESS_KEY=test
 
+echo "[DEBUG] AWS_ENDPOINT_URL: $AWS_ENDPOINT_URL"
+echo "[DEBUG] Testing LocalStack connection..."
+curl -f http://localstack:4566/_localstack/health || echo "LocalStack not reachable"
+
 cd infra-tf
 terraform init
 terraform apply -auto-approve
