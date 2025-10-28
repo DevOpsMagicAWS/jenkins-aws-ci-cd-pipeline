@@ -39,8 +39,8 @@ else
     sleep 5
     
     echo "[DEBUG] Starting our own LocalStack container..."
-    # Start LocalStack using docker-compose from /workspace/provision
-    cd /workspace/provision
+    # Start LocalStack using docker-compose from provision directory
+    cd ../provision
     docker-compose up -d localstack
     
     # Wait for LocalStack to be ready
@@ -61,7 +61,7 @@ else
         fi
     done
     
-    cd /workspace
+    cd ../scripts
 fi
 
 cd infra-tf
