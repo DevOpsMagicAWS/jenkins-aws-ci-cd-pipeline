@@ -8,7 +8,7 @@ pipeline {
     environment {
         AWS_REGION = "us-east-1"
         AWS_DEFAULT_REGION = "us-east-1"
-        AWS_ENDPOINT_URL = "http://localhost:4566"
+        AWS_ENDPOINT_URL = "http://localstack:4566"
         AWS_ACCESS_KEY_ID = "test"
         AWS_SECRET_ACCESS_KEY = "test"
     }
@@ -20,12 +20,10 @@ pipeline {
             }
         }
 
-        stage('Check LocalStack') {
+        stage('Wait for LocalStack') {
             steps {
-                sh 'docker ps | grep localstack || echo "LocalStack not running"'
-                sh 'curl -f http://localhost:4566/_localstack/health || echo "LocalStack not ready, waiting..."'
-                sh 'sleep 10'
-                sh 'curl -f http://localhost:4566/_localstack/health'
+                sh 'sleep 5'
+                echo "Using existing LocalStack container from docker-compose"
             }
         }
 
