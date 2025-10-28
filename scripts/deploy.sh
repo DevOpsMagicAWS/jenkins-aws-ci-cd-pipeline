@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e  # Exit on any error
+
 echo "[INFO] Running LocalStack deployment..."
 
 # Get LocalStack container IP
@@ -11,9 +13,9 @@ export AWS_SECRET_ACCESS_KEY=test
 
 echo "[DEBUG] AWS_ENDPOINT_URL: $AWS_ENDPOINT_URL"
 echo "[DEBUG] Testing LocalStack connection..."
-curl -f $AWS_ENDPOINT_URL/_localstack/health || echo "LocalStack not reachable"
+curl -f $AWS_ENDPOINT_URL/_localstack/health || { echo "LocalStack not reachable"; exit 1; }
 
 cd infra-tf
-terraform init
-terraform apply -auto-approve
+terraform init || { echo "Terraform init failed"; exit 1; }
+terraform apply -auto-approve || { echo "Terraform apply failed"; exit 1; }
 echo "[INFO] LocalStack deployment completed."
