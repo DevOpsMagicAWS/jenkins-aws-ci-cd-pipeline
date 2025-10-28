@@ -16,15 +16,23 @@ if [ -z "$LOCALSTACK_CONTAINER" ]; then
     exit 1
 fi
 
-# Get LocalStack container IP
-LOCALSTACK_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $LOCALSTACK_CONTAINER)
-echo "[DEBUG] LocalStack IP: $LOCALSTACK_IP"
-
-export AWS_ENDPOINT_URL=http://$LOCALSTACK_IP:4566
+# Try different connection methods for LocalStack
 export AWS_ACCESS_KEY_ID=test
 export AWS_SECRET_ACCESS_KEY=test
 
-echo "[DEBUG] AWS_ENDPOINT_URL: $AWS_ENDPOINT_URL"
+# Check if container is on devops-net network (docker-compose)
+NETWORK_CHECK=$(docker inspect $LOCALSTACK_CONTAINER --format '{{range $net, $config := .NetworkSettings.Networks}}{{$net}}{{end}}' | grep -o devops-net || echo "")
+
+if [ -n "$NETWORK_CHECK" ]; then
+    # Use container name for docker-compose network
+    export AWS_ENDPOINT_URL=http://$LOCALSTACK_CONTAINER:4566
+    echo "[DEBUG] Using docker-compose LocalStack: $AWS_ENDPOINT_URL"
+else
+    # For Docker Desktop extension, use localhost
+    export AWS_ENDPOINT_URL=http://localhost:4566
+    echo "[DEBUG] Using Docker Desktop LocalStack: $AWS_ENDPOINT_URL"
+fi
+
 echo "[DEBUG] Testing LocalStack connection..."
 curl -f $AWS_ENDPOINT_URL/_localstack/health || { echo "LocalStack not reachable"; exit 1; }
 
