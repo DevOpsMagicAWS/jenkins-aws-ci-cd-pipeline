@@ -6,17 +6,23 @@ ENV JAVA_OPTS=-Djenkins.install.runSetupWizard=false
 # Switch to root to install Docker
 USER root
 
-# Install Docker CLI
+# Install Docker CLI and Terraform
 RUN apt-get update && apt-get install -y \
     apt-transport-https \
     ca-certificates \
     curl \
     gnupg \
-    lsb-release && \
+    lsb-release \
+    wget \
+    unzip && \
     curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
     apt-get update && \
     apt-get install -y docker-ce-cli && \
+    wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_amd64.zip && \
+    unzip terraform_1.6.0_linux_amd64.zip && \
+    mv terraform /usr/local/bin/ && \
+    rm terraform_1.6.0_linux_amd64.zip && \
     rm -rf /var/lib/apt/lists/* && \
     groupadd -f docker && \
     usermod -aG docker jenkins

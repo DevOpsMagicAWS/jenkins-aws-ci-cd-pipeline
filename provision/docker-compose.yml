@@ -5,6 +5,8 @@ services:
       dockerfile: Dockerfile.jenkins
     container_name: jenkins
     restart: unless-stopped
+    privileged: true
+    user: root
     ports:
       - "8080:8080"
       - "50000:50000"
@@ -12,7 +14,7 @@ services:
       # persistent Jenkins data
       - jenkins_home:/var/jenkins_home
       # Docker socket for Jenkins to build Docker images
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:rw
       # mount project folder for testing
       - ./:/workspace
     environment:
