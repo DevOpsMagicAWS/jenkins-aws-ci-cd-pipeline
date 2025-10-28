@@ -7,9 +7,14 @@ echo "[INFO] Running LocalStack deployment..."
 echo "[DEBUG] Looking for LocalStack container..."
 docker ps | grep localstack || { echo "LocalStack container not found"; exit 1; }
 
-# Get LocalStack container name (might be different)
-LOCALSTACK_CONTAINER=$(docker ps --filter "ancestor=localstack/localstack" --format "{{.Names}}" | head -1)
+# Get LocalStack container name (try multiple patterns)
+LOCALSTACK_CONTAINER=$(docker ps --format "{{.Names}}" | grep -i localstack | head -1)
 echo "[DEBUG] Found LocalStack container: $LOCALSTACK_CONTAINER"
+
+if [ -z "$LOCALSTACK_CONTAINER" ]; then
+    echo "[ERROR] No LocalStack container found"
+    exit 1
+fi
 
 # Get LocalStack container IP
 LOCALSTACK_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $LOCALSTACK_CONTAINER)
