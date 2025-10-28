@@ -23,14 +23,18 @@ export AWS_SECRET_ACCESS_KEY=test
 # Check if container is on devops-net network (docker-compose)
 NETWORK_CHECK=$(docker inspect $LOCALSTACK_CONTAINER --format '{{range $net, $config := .NetworkSettings.Networks}}{{$net}}{{end}}' | grep -o devops-net || echo "")
 
+# Debug: Check container ports
+echo "[DEBUG] Container ports:"
+docker port $LOCALSTACK_CONTAINER || echo "No ports exposed"
+
 if [ -n "$NETWORK_CHECK" ]; then
     # Use container name for docker-compose network
     export AWS_ENDPOINT_URL=http://$LOCALSTACK_CONTAINER:4566
     echo "[DEBUG] Using docker-compose LocalStack: $AWS_ENDPOINT_URL"
 else
-    # For Docker Desktop extension, use localhost
-    export AWS_ENDPOINT_URL=http://localhost:4566
-    echo "[DEBUG] Using Docker Desktop LocalStack: $AWS_ENDPOINT_URL"
+    # For Docker Desktop extension, try host.docker.internal
+    export AWS_ENDPOINT_URL=http://host.docker.internal:4566
+    echo "[DEBUG] Using Docker Desktop LocalStack via host: $AWS_ENDPOINT_URL"
 fi
 
 echo "[DEBUG] Testing LocalStack connection..."
