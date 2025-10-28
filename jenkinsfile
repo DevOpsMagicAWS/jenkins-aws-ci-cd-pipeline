@@ -1,0 +1,75 @@
+pipeline {
+    agent any
+
+    parameters {
+        booleanParam(name: 'DESTROY_INFRASTRUCTURE', defaultValue: false, description: 'Destroy infrastructure after deployment')
+    }
+
+    environment {
+        AWS_REGION = "us-east-1"
+        AWS_DEFAULT_REGION = "us-east-1"
+        AWS_ENDPOINT_URL = "http://localstack:4566"
+        AWS_ACCESS_KEY_ID = "test"
+        AWS_SECRET_ACCESS_KEY = "test"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Start LocalStack') {
+            steps {
+                sh 'docker run -d --name localstack -p 4566:4566 -e SERVICES=s3,iam localstack/localstack:latest || true'
+                sh 'sleep 10'
+            }
+        }
+
+        stage('Validate Terraform') {
+            steps {
+                dir('infra-tf') {
+                    sh 'terraform init --input=false'
+                    sh 'terraform validate'
+                    sh 'terraform plan --out=tfplan.out'
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                dir('app') {
+                    sh 'docker build -t demo-app:latest .'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'bash scripts/deploy.sh'
+            }
+        }
+
+        stage('Destroy (Optional)') {
+            when {
+                expression { params.DESTROY_INFRASTRUCTURE == true }
+            }
+            steps {
+                sh 'bash scripts/destroy.sh'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "Pipeline finished."
+            sh 'docker stop localstack || true'
+            sh 'docker rm localstack || true'
+            cleanWs()
+        }
+        failure {
+            echo "Pipeline failed!"
+        }
+    }
+}
