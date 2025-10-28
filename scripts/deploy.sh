@@ -53,7 +53,7 @@ else
     
     echo "[DEBUG] Provision directory: $PROVISION_DIR"
     cd "$PROVISION_DIR"
-    docker-compose up -d localstack
+    docker compose up -d localstack
     
     # Wait for LocalStack to be ready
     echo "[DEBUG] Waiting for LocalStack to start..."
