@@ -16,14 +16,14 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                git branch: 'test-pipeline', url: 'https://github.com/DevOpsMagicAWS/jenkins-aws-ci-cd-pipeline.git'
             }
         }
 
-        stage('Start LocalStack') {
+        stage('Wait for LocalStack') {
             steps {
-                sh 'docker run -d --name localstack -p 4566:4566 -e SERVICES=s3,iam localstack/localstack:latest || true'
-                sh 'sleep 10'
+                sh 'sleep 5'
+                echo "Using existing LocalStack container from docker-compose"
             }
         }
 

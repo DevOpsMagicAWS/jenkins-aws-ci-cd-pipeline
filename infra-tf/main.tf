@@ -9,11 +9,7 @@ provider "aws" {
     skip_metadata_api_check = true
     skip_requesting_account_id = true
     
-    endpoints {
-        s3 = "http://localstack:4566"
-        iam = "http://localstack:4566"
-        cloudformation = "http://localstack:4566"
-    }
+    # Use AWS_ENDPOINT_URL environment variable
 }
 
 resource "aws_s3_bucket" "demo_bucket" {
@@ -22,8 +18,4 @@ resource "aws_s3_bucket" "demo_bucket" {
 
 resource "random_id" "id" {
     byte_length = 4
-}
-
-output "bucket_name" {
-    value = aws_s3_bucket.demo_bucket.bucket  
 }
