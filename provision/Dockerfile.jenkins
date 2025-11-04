@@ -30,6 +30,10 @@ RUN apt-get update && apt-get install -y \
 # Switch back to jenkins user
 USER jenkins
 
+# Configure Git
+RUN git config --global user.name "Jenkins CI" && \
+    git config --global user.email "jenkins@localhost"
+
 # Install plugins
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugins.txt
