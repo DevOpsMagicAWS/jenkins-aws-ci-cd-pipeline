@@ -57,6 +57,7 @@ services:
 
 networks:
   devops-net:
+    name: devops-net
 
 volumes:
   jenkins_home:
