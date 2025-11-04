@@ -39,6 +39,21 @@ bash scripts/destroy.sh
 2. Runs `terraform destroy` to remove all resources
 3. Cleans up AWS resources from LocalStack
 
+### `run-app.sh`
+**Purpose**: Deploys and runs the demo web application
+
+**Usage**:
+```bash
+bash scripts/run-app.sh
+```
+
+**What it does**:
+1. Stops any existing demo-app container
+2. Runs new demo-app container on devops-net network
+3. Exposes application on port 3000
+4. Tests application health with retries
+5. Provides access information
+
 ## Environment Variables
 
 The scripts use these environment variables:

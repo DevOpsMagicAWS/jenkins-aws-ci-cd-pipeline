@@ -51,6 +51,12 @@ pipeline {
             }
         }
 
+        stage('Run Application') {
+            steps {
+                sh 'bash scripts/run-app.sh'
+            }
+        }
+
         stage('Destroy (Optional)') {
             when {
                 expression { params.DESTROY_INFRASTRUCTURE == true }
@@ -64,6 +70,8 @@ pipeline {
     post {
         always {
             echo "Pipeline finished."
+            sh 'docker stop demo-app || true'
+            sh 'docker rm demo-app || true'
             sh 'docker stop localstack || true'
             sh 'docker rm localstack || true'
             cleanWs()

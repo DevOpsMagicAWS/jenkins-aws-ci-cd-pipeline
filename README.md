@@ -2,7 +2,23 @@
 
 A complete DevOps CI/CD pipeline using Jenkins, Terraform, Docker, and LocalStack for AWS service mocking.
 
+![Pipeline Overview](images/pipeline-overview.png)
+
+## 🚀 Live Demo
+
+![Jenkins Pipeline](images/jenkins-pipeline-success.png)
+
+![Demo Application](images/demo-app-running.png)
+
+![LocalStack Health Check](images/localstack-health-check.png)
+
+![Docker Containers](images/docker-containers.png)
+
+![Terraform Apply Output](images/terraform-apply-output.png)
+
 ## Architecture
+
+![Architecture Diagram](images/architecture-diagram.png)
 
 - **Jenkins**: CI/CD orchestration
 - **Terraform**: Infrastructure as Code
